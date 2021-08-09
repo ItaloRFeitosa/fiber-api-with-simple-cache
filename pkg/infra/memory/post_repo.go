@@ -1,22 +1,27 @@
-package inmemmory
+package memory
 
 import "github.com/italorfeitosa/fiber-api-with-simple-cache/pkg/domain"
 
-type PostRepo struct {
+type MemoryPostRepo struct {
     mu sync.RWMutex
-	Posts []domain.Post
+	posts []domain.Post
 }
 
-func NewPostRepo() *PostRepo {
+func NewMemoryPostRepo() *MemoryPostRepo {
 	var posts []domain.Post
-	return &PostRepo{
-		Posts: posts,
+	return &MemoryPostRepo{
+		posts: posts,
 	}
 }
 
-func (r *PostRepo) Insert(post domain.Post) error{
+func (r *MemoryPostRepo) Insert(post domain.Post) error{
 	r.mu.Lock()
-	r.Posts = append(r.Posts, post)
-	r.mu.Unlock()
+	defer r.mu.Unlock()
+	r.posts = append(r.posts, post)
 	return nil
+
+func (r *MemoryPostRepo) FindAll() ([]domain.Post, error) {
+    r.mu.Lock()
+	defer r.mu.Unlock()
+    return r.posts, nil
 }
