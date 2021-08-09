@@ -3,7 +3,7 @@ package handlers
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/italorfeitosa/fiber-api-with-simple-cache/pkg/infra/cache"
-	inmemmory "github.com/italorfeitosa/fiber-api-with-simple-cache/pkg/infra/in_memmory"
+	"github.com/italorfeitosa/fiber-api-with-simple-cache/pkg/infra/memory"
 	"github.com/italorfeitosa/fiber-api-with-simple-cache/pkg/usecases"
 )
 
@@ -12,7 +12,7 @@ type CreatePostHandler struct {
 }
 
 func NewCreatePostHandler() CreatePostHandler {
-	postRepo := inmemmory.NewPostRepo()
+	postRepo := memory.NewMemoryPostRepo()
 	redisClient := cache.NewRedisClient()
 	useCase := usecases.NewCreatePostUseCase(postRepo, redisClient)
 
